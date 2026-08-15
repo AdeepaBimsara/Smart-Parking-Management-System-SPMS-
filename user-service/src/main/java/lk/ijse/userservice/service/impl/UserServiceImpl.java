@@ -7,6 +7,7 @@ import lk.ijse.userservice.repository.UserRepository;
 import lk.ijse.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * ============================================================
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserResponse createUser(UserCreateRequest request) {
@@ -34,7 +36,9 @@ public class UserServiceImpl implements UserService {
 
         user.setName(request.getName());
         user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
+        user.setPassword(
+                passwordEncoder.encode(request.getPassword())
+        );
         user.setPhone(request.getPhone());
         user.setRole(request.getRole());
 
