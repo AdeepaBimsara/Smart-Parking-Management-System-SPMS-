@@ -1,5 +1,9 @@
 package lk.ijse.userservice.service;
 
+import lk.ijse.userservice.dto.UserCreateRequest;
+import lk.ijse.userservice.dto.UserResponse;
+import lk.ijse.userservice.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,5 +16,8 @@ import org.springframework.stereotype.Service;
  * ============================================================
  */
 @Service
-public class UserService {
+public interface UserService {
+
+    public UserResponse createUser(UserCreateRequest request);
+
 }
