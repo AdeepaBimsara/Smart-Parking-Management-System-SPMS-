@@ -3,6 +3,8 @@ package lk.ijse.userservice.repository;
 import lk.ijse.userservice.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 /**
  * ============================================================
  * Project      : Smart-Parking-Management-System
@@ -15,4 +17,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface UserRepository extends JpaRepository<User,Long> {
 
     public boolean existsByEmail(String email);
+
+    Optional<User> findByEmail(String email);
 }

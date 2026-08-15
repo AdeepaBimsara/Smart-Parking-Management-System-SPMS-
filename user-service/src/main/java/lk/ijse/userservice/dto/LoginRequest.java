@@ -1,39 +1,24 @@
 package lk.ijse.userservice.dto;
 
-import lk.ijse.userservice.entity.Role;
-import lombok.*;
-
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * ============================================================
  * Project      : Smart-Parking-Management-System
  * Author      : Adeepa Bimsara
  * GitHub      : https://github.com/AdeepaBimsara
- * Created     : 8/12/26 6:53 PM
+ * Created     : 8/15/26 5:18 PM
  * ============================================================
  * ============================================================
  */
-
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@Data
-@Builder
-public class UserResponse {
-
-    private Long id;
-
-    private String name;
+public class LoginRequest {
 
     private String email;
+    private String password;
 
-    private String phone;
-
-    private Role role;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
 }

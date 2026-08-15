@@ -1,13 +1,18 @@
 package lk.ijse.userservice.controller;
 
+import jakarta.validation.Valid;
+import lk.ijse.userservice.dto.LoginRequest;
 import lk.ijse.userservice.dto.UserCreateRequest;
 import lk.ijse.userservice.dto.UserResponse;
+import lk.ijse.userservice.dto.UserUpdateRequest;
 import lk.ijse.userservice.service.UserService;
 import lk.ijse.userservice.util.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * ============================================================
@@ -19,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
  * ============================================================
  */
 @RestController
-@RequestMapping("api/v1/users")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 @CrossOrigin
 public class UserController {
@@ -27,8 +32,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<ApiResponse<UserResponse>> createUser(@RequestBody UserCreateRequest request){
+    public ResponseEntity<ApiResponse<UserResponse>> createUser(@Valid @RequestBody UserCreateRequest request){
 
         UserResponse response = userService.createUser(request);
 
@@ -38,5 +42,69 @@ public class UserController {
                         "User create successfully",
                         response
                 ));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<UserResponse>> getUserById(@PathVariable Long id){
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        200,
+                        "User retrieved successfully",
+                        userService.getUserById(id)
+                )
+        );
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<UserResponse>>> getAllUsers(){
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        200,
+                        "User retrieved successfully",
+                        userService.getAllUsers()
+                )
+        );
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<UserResponse>> updateUser(
+            @PathVariable Long id, @Valid @RequestBody UserUpdateRequest request){
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        200,
+                        "User update successfully",
+                        userService.updateUser(id, request)
+                )
+        );
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable Long id){
+
+        userService.deleteUser(id);
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        200,
+                        "User delete successfully",
+                        null
+                )
+        );
+
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse<UserResponse>> login(@RequestBody LoginRequest request){
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        200,
+                        "User login successfully",
+                        userService.login(request)
+                )
+        );
     }
 }
