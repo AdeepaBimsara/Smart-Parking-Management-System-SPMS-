@@ -1,14 +1,12 @@
 package lk.ijse.userservice.service.impl;
 
-import lk.ijse.userservice.dto.LoginRequest;
-import lk.ijse.userservice.dto.UserCreateRequest;
-import lk.ijse.userservice.dto.UserResponse;
-import lk.ijse.userservice.dto.UserUpdateRequest;
+import lk.ijse.userservice.dto.*;
 import lk.ijse.userservice.entity.User;
 import lk.ijse.userservice.exception.DuplicateEmailException;
 import lk.ijse.userservice.exception.InvalidCredentialsException;
 import lk.ijse.userservice.exception.UserNotFoundException;
 import lk.ijse.userservice.repository.UserRepository;
+import lk.ijse.userservice.security.JwtService;
 import lk.ijse.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,6 +29,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     @Override
     public UserResponse createUser(UserCreateRequest request) {
@@ -98,7 +97,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse login(LoginRequest request) {
+    public LoginResponse login(LoginRequest request) {
 
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(()-> new InvalidCredentialsException("Invalid email or password"));
@@ -107,7 +106,12 @@ public class UserServiceImpl implements UserService {
             throw new InvalidCredentialsException("Invalid email or password");
         }
 
-        return mapToResponse(user);
+        String token = jwtService.generateToken(user.getEmail());
+
+        return new LoginResponse(
+                token,
+                mapToResponse(user)
+        );
     }
 
     private UserResponse mapToResponse(User user){

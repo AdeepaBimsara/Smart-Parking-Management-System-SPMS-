@@ -1,9 +1,6 @@
 package lk.ijse.userservice.service;
 
-import lk.ijse.userservice.dto.LoginRequest;
-import lk.ijse.userservice.dto.UserCreateRequest;
-import lk.ijse.userservice.dto.UserResponse;
-import lk.ijse.userservice.dto.UserUpdateRequest;
+import lk.ijse.userservice.dto.*;
 import lk.ijse.userservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,5 +29,5 @@ public interface UserService {
 
      void deleteUser(Long id);
 
-     UserResponse login(LoginRequest request);
+     LoginResponse login(LoginRequest request);
 }

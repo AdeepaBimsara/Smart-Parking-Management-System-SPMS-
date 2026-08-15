@@ -1,10 +1,7 @@
 package lk.ijse.userservice.controller;
 
 import jakarta.validation.Valid;
-import lk.ijse.userservice.dto.LoginRequest;
-import lk.ijse.userservice.dto.UserCreateRequest;
-import lk.ijse.userservice.dto.UserResponse;
-import lk.ijse.userservice.dto.UserUpdateRequest;
+import lk.ijse.userservice.dto.*;
 import lk.ijse.userservice.service.UserService;
 import lk.ijse.userservice.util.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -97,7 +94,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<UserResponse>> login(@RequestBody LoginRequest request){
+    public ResponseEntity<ApiResponse<LoginResponse>> login(@RequestBody LoginRequest request){
 
         return ResponseEntity.ok(
                 new ApiResponse<>(
