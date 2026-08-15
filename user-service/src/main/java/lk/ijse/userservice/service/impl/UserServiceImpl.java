@@ -5,6 +5,9 @@ import lk.ijse.userservice.dto.UserCreateRequest;
 import lk.ijse.userservice.dto.UserResponse;
 import lk.ijse.userservice.dto.UserUpdateRequest;
 import lk.ijse.userservice.entity.User;
+import lk.ijse.userservice.exception.DuplicateEmailException;
+import lk.ijse.userservice.exception.InvalidCredentialsException;
+import lk.ijse.userservice.exception.UserNotFoundException;
 import lk.ijse.userservice.repository.UserRepository;
 import lk.ijse.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +36,7 @@ public class UserServiceImpl implements UserService {
     public UserResponse createUser(UserCreateRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail())){
-            throw new RuntimeException("Email is already exists");
+            throw new DuplicateEmailException("Email is already exists");
         }
 
         User user = new User();
@@ -55,7 +58,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse getUserById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         return mapToResponse(user);
     }
@@ -73,7 +76,7 @@ public class UserServiceImpl implements UserService {
     public UserResponse updateUser(Long id, UserUpdateRequest request) {
 
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found") );
+                .orElseThrow(() -> new UserNotFoundException("User not found") );
 
         user.setName(request.getName());
         user.setEmail(request.getEmail());
@@ -89,7 +92,7 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(Long id) {
 
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         userRepository.delete(user);
     }
@@ -98,10 +101,10 @@ public class UserServiceImpl implements UserService {
     public UserResponse login(LoginRequest request) {
 
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(()-> new RuntimeException("Invalid email or password"));
+                .orElseThrow(()-> new InvalidCredentialsException("Invalid email or password"));
 
         if (!passwordEncoder.matches(request.getPassword(),user.getPassword())){
-            throw new RuntimeException("Invalid email or password");
+            throw new InvalidCredentialsException("Invalid email or password");
         }
 
         return mapToResponse(user);
